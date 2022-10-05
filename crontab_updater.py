@@ -54,7 +54,10 @@ class CrontabUpdater:
 
     def restore(self):
         print('Restoring...')
-        most_recent_filename = os.path.join(self.dirname, max(os.listdir(self.dirname)))
+        dir_contents = os.listdir(self.dirname)
+        if not dir_contents:
+            raise RuntimeError(f"There are no backups in {self.dirname}; aborting restore")
+        most_recent_filename = os.path.join(self.dirname, max(dir_contents))
         print(f"...from {most_recent_filename}...")
         most_recent_crontabs = self.get_crontabs_from_file(most_recent_filename)
         print(f"Found {len(most_recent_crontabs)} crontabs")
