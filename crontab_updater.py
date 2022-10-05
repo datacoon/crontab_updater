@@ -8,15 +8,15 @@ from vars import STUB
 
 
 class CrontabUpdater:
-    def __init__(self, prefix='crontab', folder='crontabs', filelim=10):
+    def __init__(self, prefix='crontab', dirname='crontabs', filelim=10):
         self.prefix = prefix
-        self.folder = folder
+        self.dirname = dirname
         self.filelim = filelim
         self.timelet = None
         self.proj = None
         self.script = None
         try:
-            os.makedirs(self.folder)
+            os.makedirs(self.dirname)
         except FileExistsError:
             pass
 
@@ -29,7 +29,7 @@ class CrontabUpdater:
         self.script = self.script.split('.')[0]
 
     def get_crontab_filename(self):
-        return os.path.join(self.folder, f'{self.prefix}{datetime.datetime.now():%Y%m%d%H%M%S%f}')
+        return os.path.join(self.dirname, f'{self.prefix}{datetime.datetime.now():%Y%m%d%H%M%S%f}')
 
     def new(self):
         return STUB.format(timelet=self.timelet, proj=self.proj, script=self.script)
@@ -54,7 +54,7 @@ class CrontabUpdater:
 
     def restore(self):
         print('Restoring...')
-        most_recent_filename = os.path.join(self.folder, max(os.listdir(self.folder)))
+        most_recent_filename = os.path.join(self.dirname, max(os.listdir(self.dirname)))
         print(f"...from {most_recent_filename}...")
         most_recent_crontabs = self.get_crontabs_from_file(most_recent_filename)
         print(f"Found {len(most_recent_crontabs)} crontabs")
@@ -97,12 +97,12 @@ class CrontabUpdater:
     def del_redundant_files(self):
         print("Deleting redundant files...")
         pattern = re.compile(self.prefix + r'\d+')
-        prev_crontabs = sorted(filter(pattern.match, os.listdir(self.folder)))
+        prev_crontabs = sorted(filter(pattern.match, os.listdir(self.dirname)))
         outdated = len(prev_crontabs) - self.filelim
         if outdated > 0:
             print(f"Removing {outdated} files...")
             for index in range(outdated):
-                os.remove(os.path.join(self.folder, prev_crontabs[index]))
+                os.remove(os.path.join(self.dirname, prev_crontabs[index]))
             print("...done deleting redundant files")
         else:
             print("Nothing to remove")
