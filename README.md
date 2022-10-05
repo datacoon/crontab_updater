@@ -15,10 +15,10 @@ Python3.8+
 ## Установка
 
 * `git clone ...`
-* В полученной директории `crontab_updater` нужно создать файл `vars.py` 
+* В полученной директории `crontab_updater` нужно создать файл `template.py` 
 с шаблоном для индивидуальных настроек (добавлен в .gitignore).
 
-Пример содержимого `vars.py`:
+Пример содержимого `template.py`:
 ```python
 STUB = "{timelet} /path_to_my_virtual_environment/bin/python /path/{proj}/{script}.py > /path/{proj}/{script}.log 2> path/{proj}/{script}.err\n"
 ```

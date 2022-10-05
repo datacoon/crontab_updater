@@ -4,7 +4,7 @@ import re
 import subprocess
 import sys
 
-from vars import STUB
+from template import STUB
 
 
 class EmptyCrontabs(Exception):
