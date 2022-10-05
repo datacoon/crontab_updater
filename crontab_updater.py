@@ -37,8 +37,12 @@ class CrontabUpdater:
     def dump_from_subprocess(self):
         print("Dumping current crontabs from subprocess...")
         crontabs_filename = self.get_crontab_filename()
+        try:
+            subprocess_output = subprocess.check_output(['crontab', '-l'])
+        except subprocess.CalledProcessError:
+            raise RuntimeError("There are no crontabs; aborting dump")
         with open(crontabs_filename, 'wb') as handler:
-            handler.write(subprocess.check_output(['crontab', '-l']))
+            handler.write(subprocess_output)
         print(f"Dumped to {crontabs_filename}")
         return crontabs_filename
 
