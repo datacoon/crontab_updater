@@ -8,13 +8,13 @@ from vars import STUB
 
 
 class CrontabUpdater:
-    def __init__(self, prefix='crontab', timelet=None, proj=None, script=None, folder='crontabs', filelim=10):
+    def __init__(self, prefix='crontab', folder='crontabs', filelim=10):
         self.prefix = prefix
-        self.timelet = timelet
-        self.proj = proj
-        self.script = script
         self.folder = folder
         self.filelim = filelim
+        self.timelet = None
+        self.proj = None
+        self.script = None
         try:
             os.makedirs(self.folder)
         except FileExistsError:
@@ -153,5 +153,4 @@ class CrontabUpdater:
 
 
 if __name__ == '__main__':
-    # CrontabUpdater(timelet='0 10 * * *', proj='some_proj_name', script='launch_upd').launch()
     CrontabUpdater().launch()
