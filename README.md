@@ -30,7 +30,7 @@ STUB = "{timelet} /path_to_my_virtual_environment/bin/python /path/{proj}/{scrip
 
 В результате одного запуска утилиты в сrontab появляется новая строка вида:
 ```bash
-* * * * * /home/my_user/my_project/venv/bin/python /home/my_user/my_project/my_script.py > /home/my_user/my_project/logs/my_script.log 2> /home/my_user/my_project/logs/my_script.err
+* * * * * /home/my_user/my_project/venv/bin/python /home/my_user/path_to_my_project/my_script.py > /home/my_user/path_to_my_project/my_script.log 2> /home/my_user/path_to_my_project/my_script.err
 ```
 
 ## Основные возможности
@@ -42,7 +42,7 @@ STUB = "{timelet} /path_to_my_virtual_environment/bin/python /path/{proj}/{scrip
 RuntimeError: There are no backups in crontabs; aborting restore
 ```
 - `python crontab_updater.py add "0 9 * * *" my_dir my_script` добавляет новый кронтаб: 
-скрипт my_dir/my_script.py будет запускаться еждневно в 9 утра. 
+скрипт my_dir/my_script.py будет запускаться ежедневно в 9 утра. 
 - `python crontab_updater.py del my_dir my_script` или 
 `python crontab_updater.py del "0 9 * * *" my_dir my_script` удаляет кронтаб с идентификатором 
 по директории, названию скрипта либо времени запуска, директории и названию скрипта;
