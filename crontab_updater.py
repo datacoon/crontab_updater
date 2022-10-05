@@ -126,12 +126,8 @@ class CrontabUpdater:
             else:
                 raise RuntimeError(f"Odd command {command}!")
         elif len(argv) == 2:
-            command = argv[1]  # main | dump | sort
-            if command == 'main':  # add from main
-                assert self.timelet and self.proj and self.script, "New crontab content is missing!"
-                self.fix_script_name()
-                self.add()
-            elif command == 'restore':
+            command = argv[1]  # dump | sort
+            if command == 'restore':
                 self.restore()
             elif command == 'dump':
                 self.dump_from_subprocess()
@@ -147,7 +143,6 @@ class CrontabUpdater:
                   f"or 'python crontab_updater.py del {crontab_template}'")
             print("For dumping current crontabs to file, use 'python crontab_updater.py dump'")
             print("For sorting current crontabs, use 'python crontab_updater.py sort'")
-            print("For running from main, use 'python crontab_updater.py main'")
         else:
             raise RuntimeError(f"Something funny this way comes: {argv}!")
 
