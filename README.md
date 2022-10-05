@@ -20,7 +20,7 @@ Python3.8+
 
 Пример содержимого `template.py`:
 ```python
-STUB = "{timelet} /path_to_my_virtual_environment/bin/python /path/{proj}/{script}.py > /path/{proj}/{script}.log 2> path/{proj}/{script}.err\n"
+TEMPLATE = "{timelet} /path_to_my_virtual_environment/bin/python /path/{proj}/{script}.py > /path/{proj}/{script}.log 2> path/{proj}/{script}.err\n"
 ```
 * `{timelet}` - переменная, в которую будет добавляться паттерн, определяющий регулярность 
 запуска задачи

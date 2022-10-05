@@ -4,7 +4,7 @@ import re
 import subprocess
 import sys
 
-from template import STUB
+from template import TEMPLATE
 
 
 class EmptyCrontabs(Exception):
@@ -36,7 +36,7 @@ class CrontabUpdater:
         return os.path.join(self.dirname, f'{self.prefix}{datetime.datetime.now():%Y%m%d%H%M%S%f}')
 
     def new(self):
-        return STUB.format(timelet=self.timelet, proj=self.proj, script=self.script)
+        return TEMPLATE.format(timelet=self.timelet, proj=self.proj, script=self.script)
 
     def dump_from_subprocess(self):
         print("Dumping current crontabs from subprocess...")
