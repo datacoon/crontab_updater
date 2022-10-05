@@ -140,10 +140,10 @@ class CrontabUpdater:
             else:
                 raise RuntimeError(f"Odd command '{command}'!")
         elif len(argv) == 1:  # help
-            crontab_template = '"0 9 * * *" folder script'
+            crontab_template = '"0 9 * * *" dirname script'
             print("For restoring crontabs from most recent file, use 'python crontab_updater.py restore'")
             print(f"For adding a crontab, use 'python crontab_updater.py add {crontab_template}'")
-            print(f"For deleting a crontab, use 'python crontab_updater.py del folder script' "
+            print(f"For deleting a crontab, use 'python crontab_updater.py del dirname script' "
                   f"or 'python crontab_updater.py del {crontab_template}'")
             print("For dumping current crontabs to file, use 'python crontab_updater.py dump'")
             print("For sorting current crontabs, use 'python crontab_updater.py sort'")
