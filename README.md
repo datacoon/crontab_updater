@@ -11,7 +11,7 @@
 Сохраняются не более filelim (именованный аргумент класса CrontabUpdater, 10 по умолчанию) бэкапов. Актуальные кронтабы оказываются забэкаплены после всех операций.
 
 В файле vars.py хранится переменная вида 
-"{timelet} /path_to_my_virtual_environment/bin/python path/{proj}/{script}.py > path/{proj}/{script}.log 2> path/{proj}/{script}.err\n",
+"{timelet} /path_to_my_virtual_environment/bin/python /path/{proj}/{script}.py > /path/{proj}/{script}.log 2> /path/{proj}/{script}.err\n",
 при форматировании которой получается кронтаб.
 
 
