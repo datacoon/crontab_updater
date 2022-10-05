@@ -41,13 +41,13 @@ STUB = "{timelet} /path_to_my_virtual_environment/bin/python /path/{proj}/{scrip
 ```
 RuntimeError: There are no backups in crontabs; aborting restore
 ```
-- `python crontab_updater.py add "0 9 * * *" my_dir my_script` добавляет новый кронтаб: 
+- `python crontab_updater.py add "0 9 * * *" my_dir my_script` добавляет новую задачу в кронтаб: 
 скрипт my_dir/my_script.py будет запускаться ежедневно в 9 утра. 
 - `python crontab_updater.py del my_dir my_script` или 
-`python crontab_updater.py del "0 9 * * *" my_dir my_script` удаляет кронтаб с идентификатором 
+`python crontab_updater.py del "0 9 * * *" my_dir my_script` удаляет задачу с идентификатором 
 по директории, названию скрипта либо времени запуска, директории и названию скрипта;
-- `python crontab_updater.py dump` бэкапит текущий кронтаб. Если в настоящий момент еще нет ни 
-одного кронтаба, то вернется трейсбек, сообщающий об этом:
+- `python crontab_updater.py dump` бэкапит текущий кронтаб. Если в настоящий момент еще нет кронтаба, 
+то вернется трейсбек, сообщающий об этом:
 ```
 RuntimeError: There are no crontabs; aborting dump
 ```
@@ -62,8 +62,8 @@ RuntimeError: There are no crontabs; aborting dump
 
 ## Кастомизация
 
-Работа утилиты определяется классом `CrontabUpdater`. Изменить названия директории бэкапов, 
-названий файлов и их максимального числа можно путем передачи этому классу новых параметров, 
+Работа утилиты определяется классом `CrontabUpdater`. Изменить название директории бэкапов, 
+префиксы файлов и их максимальное число можно путем передачи этому классу новых параметров, 
 а именно:
 - `dirname` - название директории бэкапов (по умолчанию crontabs)
 - `prefix` - префикс названия файла с бэкапом (по умолчанию crontab)
