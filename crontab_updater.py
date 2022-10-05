@@ -7,6 +7,10 @@ import sys
 from vars import STUB
 
 
+class EmptyCrontabs(Exception):
+    pass
+
+
 class CrontabUpdater:
     def __init__(self, prefix='crontab', dirname='crontabs', filelim=10):
         self.prefix = prefix
@@ -40,7 +44,7 @@ class CrontabUpdater:
         try:
             subprocess_output = subprocess.check_output(['crontab', '-l'])
         except subprocess.CalledProcessError:
-            raise RuntimeError("There are no crontabs; aborting dump")
+            raise EmptyCrontabs("There are no crontabs; aborting dump")
         with open(crontabs_filename, 'wb') as handler:
             handler.write(subprocess_output)
         print(f"Dumped to {crontabs_filename}")
@@ -70,11 +74,17 @@ class CrontabUpdater:
 
     def add(self):
         print('Adding...')
-        crontabs_filename = self.dump_from_subprocess()
-        curr_crontabs = set(self.get_crontabs_from_file(crontabs_filename))
+        try:
+            crontabs_filename = self.dump_from_subprocess()
+        except EmptyCrontabs as e:
+            print(e)
+            crontabs_filename = None
+            curr_crontabs = set()
+        else:
+            curr_crontabs = set(self.get_crontabs_from_file(crontabs_filename))
         prev_len = len(curr_crontabs)
         curr_crontabs.add(self.new())
-        if len(curr_crontabs) == prev_len:
+        if crontabs_filename and len(curr_crontabs) == prev_len:
             os.remove(crontabs_filename)
             raise RuntimeError("New tab is already there")
         self.dump_from_var(list(curr_crontabs))
