@@ -13,14 +13,14 @@ class EmptyCrontabs(Exception):
 
 class CrontabUpdater:
     def __init__(self, prefix='crontab', dirname='crontabs', filelim=10):
-        self.prefix = prefix
-        self.dirname = dirname
-        self.filelim = filelim
-        self.timelet = None
-        self.proj = None
-        self.script = None
+        self._prefix = prefix
+        self._dirname = dirname
+        self._filelim = filelim
+        self._timelet = None
+        self._proj = None
+        self._script = None
         try:
-            os.makedirs(self.dirname)
+            os.makedirs(self._dirname)
         except FileExistsError:
             pass
 
@@ -30,13 +30,13 @@ class CrontabUpdater:
             return [line for line in handler.readlines() if not line.startswith('#')]
 
     def fix_script_name(self):
-        self.script = self.script.split('.')[0]
+        self._script = self._script.split('.')[0]
 
     def get_crontab_filename(self):
-        return os.path.join(self.dirname, f'{self.prefix}{datetime.datetime.now():%Y%m%d%H%M%S%f}')
+        return os.path.join(self._dirname, f'{self._prefix}{datetime.datetime.now():%Y%m%d%H%M%S%f}')
 
     def new(self):
-        return TEMPLATE.format(timelet=self.timelet, proj=self.proj, script=self.script)
+        return TEMPLATE.format(timelet=self._timelet, proj=self._proj, script=self._script)
 
     def dump_from_subprocess(self):
         print("Dumping current crontabs from subprocess...")
@@ -62,10 +62,10 @@ class CrontabUpdater:
 
     def restore(self):
         print('Restoring...')
-        dir_contents = os.listdir(self.dirname)
+        dir_contents = os.listdir(self._dirname)
         if not dir_contents:
-            raise RuntimeError(f"There are no backups in {self.dirname}; aborting restore")
-        most_recent_filename = os.path.join(self.dirname, max(dir_contents))
+            raise RuntimeError(f"There are no backups in {self._dirname}; aborting restore")
+        most_recent_filename = os.path.join(self._dirname, max(dir_contents))
         print(f"...from {most_recent_filename}...")
         most_recent_crontabs = self.get_crontabs_from_file(most_recent_filename)
         print(f"Found {len(most_recent_crontabs)} crontabs")
@@ -95,8 +95,8 @@ class CrontabUpdater:
         crontabs_filename = self.dump_from_subprocess()
         curr_crontabs = self.get_crontabs_from_file(crontabs_filename)
         for indx in range(len(curr_crontabs)):
-            if f"/{self.proj}/{self.script}.py >" in curr_crontabs[indx]:
-                if self.timelet and self.timelet not in curr_crontabs[indx]:
+            if f"/{self._proj}/{self._script}.py >" in curr_crontabs[indx]:
+                if self._timelet and self._timelet not in curr_crontabs[indx]:
                     continue
                 del curr_crontabs[indx]
                 self.dump_from_var(curr_crontabs)
@@ -104,7 +104,7 @@ class CrontabUpdater:
                 break
         else:
             os.remove(crontabs_filename)
-            raise RuntimeError(f"{self.proj}/{self.script} is not there! Deleted {crontabs_filename}")
+            raise RuntimeError(f"{self._proj}/{self._script} is not there! Deleted {crontabs_filename}")
 
     def sort(self):
         print('Sorting...')
@@ -113,13 +113,13 @@ class CrontabUpdater:
 
     def del_redundant_files(self):
         print("Deleting redundant files...")
-        pattern = re.compile(self.prefix + r'\d+')
-        prev_crontabs = sorted(filter(pattern.match, os.listdir(self.dirname)))
-        outdated = len(prev_crontabs) - self.filelim
+        pattern = re.compile(self._prefix + r'\d+')
+        prev_crontabs = sorted(filter(pattern.match, os.listdir(self._dirname)))
+        outdated = len(prev_crontabs) - self._filelim
         if outdated > 0:
             print(f"Removing {outdated} files...")
             for index in range(outdated):
-                os.remove(os.path.join(self.dirname, prev_crontabs[index]))
+                os.remove(os.path.join(self._dirname, prev_crontabs[index]))
             print("...done deleting redundant files")
         else:
             print("Nothing to remove")
@@ -127,7 +127,7 @@ class CrontabUpdater:
     def launch(self):
         argv = sys.argv
         if len(argv) == 5:
-            _, command, self.timelet, self.proj, self.script = argv
+            _, command, self._timelet, self._proj, self._script = argv
             self.fix_script_name()
             if command == 'del':  # delete with timelet provided
                 self.delete()
@@ -136,7 +136,7 @@ class CrontabUpdater:
             else:
                 raise RuntimeError(f"Odd command {command}!")
         elif len(argv) == 4:
-            _, command, self.proj, self.script = argv
+            _, command, self._proj, self._script = argv
             self.fix_script_name()
             if command == 'del':  # delete without timelet provided
                 self.delete()
